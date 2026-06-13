@@ -56,7 +56,7 @@ export default function Home() {
           position: "absolute", bottom: 40, left: "50%", transform: "translateX(-50%)",
           color: "#555", fontSize: 13, letterSpacing: 2, animation: "none"
         }}>
-          {"Abatur Ministry"}
+          {"Абатур Ministry"}
         </div>
       </section>
 
