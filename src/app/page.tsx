@@ -38,7 +38,7 @@ export default function Home() {
       <section id="home" style={{
         position: "relative", height: "100vh", display: "flex",
         alignItems: "center", justifyContent: "center",
-        background: "linear-gradient(135deg, #0a0a0a 0%, #1a1510 50%, #0a0a0a 100%)"
+       background: "linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url('/hero-bg.jpg') center/cover no-repeat"
       }}>
         <div style={{ position: "relative", zIndex: 1, textAlign: "center", padding: "0 20px" }}>
           <p style={{ color: "#888", fontSize: 14, letterSpacing: 6, marginBottom: 20, textTransform: "uppercase", fontWeight: 500 }}>
