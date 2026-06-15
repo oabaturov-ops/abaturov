@@ -1,6 +1,8 @@
 "use client";
 
 import Nav from "@/components/Nav";
+import AnimatedSection from "@/components/AnimatedSection";
+import SubscribeForm from "@/components/SubscribeForm";
 
 const projects = [
   {
@@ -64,6 +66,7 @@ export default function Home() {
 
       {/* About */}
       <section id="about" style={{ padding: "120px 20px", maxWidth: 900, margin: "0 auto", textAlign: "center" }}>
+      <AnimatedSection>
         <h2 style={{ color: "#d4af37", fontSize: 38, marginBottom: 30, fontWeight: 600 }}>
           {"\u041E \u043A\u043E\u043D\u0446\u0435\u043F\u0446\u0438\u0438"}
         </h2>
@@ -87,6 +90,7 @@ export default function Home() {
             <p style={{ color: "#888", fontSize: 15, lineHeight: 1.7 }}>{"\u0418\u043C\u044F \u043A\u0430\u043A \u043A\u043B\u044E\u0447 \u043A \u043B\u0438\u0447\u043D\u043E\u0441\u0442\u0438. \u0420\u0443\u0441\u0441\u043A\u0430\u044F \u0440\u0435\u043B\u0438\u0433\u0438\u043E\u0437\u043D\u0430\u044F \u0444\u0438\u043B\u043E\u0441\u043E\u0444\u0438\u044F \u0432 \u0441\u043E\u0432\u0440\u0435\u043C\u0435\u043D\u043D\u043E\u043C \u043F\u0440\u043E\u0447\u0442\u0435\u043D\u0438\u0438."}</p>
           </div>
         </div>
+      </AnimatedSection>
       </section>
 
       {/* Projects */}
@@ -142,6 +146,46 @@ export default function Home() {
             {"\u0418\u043E\u0430\u043D\u043D\u0430 8:32"}
           </cite>
         </div>
+      </section>
+
+      {/* Blog Preview */}
+      <section style={{ padding: "120px 20px", maxWidth: 1000, margin: "0 auto" }}>
+        <AnimatedSection>
+          <h2 style={{ textAlign: "center", color: "#d4af37", fontSize: 38, marginBottom: 15, fontWeight: 600 }}>
+            {"\u0411\u043B\u043E\u0433"}
+          </h2>
+          <p style={{ textAlign: "center", color: "#888", marginBottom: 50, fontSize: 16 }}>
+            {"\u041F\u043E\u0441\u043B\u0435\u0434\u043D\u0438\u0435 \u043C\u0430\u0442\u0435\u0440\u0438\u0430\u043B\u044B \u0438\u0437 \u043D\u0430\u0448\u0435\u0433\u043E \u0441\u043B\u0443\u0436\u0435\u043D\u0438\u044F"}
+          </p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 30 }}>
+            {[
+              { title: "\u0421\u043D\u043E\u0432\u0438\u0434\u0435\u043D\u0438\u044F. \u0411\u043E\u0436\u044C\u0438 \u043F\u0440\u0438\u0442\u0447\u0438", excerpt: "\u041E \u0447\u0451\u043C \u0433\u043E\u0432\u043E\u0440\u0438\u0442 \u0411\u043E\u0433 \u0432 \u0441\u043D\u043E\u0432\u0438\u0434\u0435\u043D\u0438\u044F\u0445. \u041F\u0440\u0438\u0442\u0447\u0430 \u043A\u0430\u043A \u0438\u0441\u0442\u0438\u043D\u0430 \u0432 \u043A\u0430\u0440\u0442\u0438\u043D\u0430\u0445 \u0438 \u043E\u0431\u0440\u0430\u0437\u0430\u0445.", slug: "dreams-gods-parables", date: "15.06.2026" },
+              { title: "\u0422\u043E\u043B\u043A\u043E\u0432\u0430\u043D\u0438\u0435 \u0441\u043D\u043E\u0432", excerpt: "\u041A\u0430\u043A \u0440\u0430\u0437\u043B\u0438\u0447\u0430\u0442\u044C \u0438\u0441\u0442\u043E\u0447\u043D\u0438\u043A\u0438 \u0441\u043D\u043E\u0432\u0438\u0434\u0435\u043D\u0438\u0439 \u0438 \u043F\u043E\u043D\u0438\u043C\u0430\u0442\u044C \u043F\u043E\u0441\u043B\u0430\u043D\u0438\u044F.", slug: "dream-interpretation", date: "10.06.2026" },
+              { title: "\u0418\u0441\u0442\u0438\u043D\u0430 \u0438 \u0441\u0432\u043E\u0431\u043E\u0434\u0430", excerpt: "\u041F\u043E\u0437\u043D\u0430\u0439\u0442\u0435 \u0438\u0441\u0442\u0438\u043D\u0443, \u0438 \u0438\u0441\u0442\u0438\u043D\u0430 \u0441\u0434\u0435\u043B\u0430\u0435\u0442 \u0432\u0430\u0441 \u0441\u0432\u043E\u0431\u043E\u0434\u043D\u044B\u043C\u0438.", slug: "truth-and-freedom", date: "01.06.2026" },
+            ].map((article, i) => (
+              <a key={i} href={`https://abaturministry.org/blog/${article.slug}`} target="_blank" rel="noopener noreferrer"
+                style={{ textDecoration: "none", background: "#111", border: "1px solid #222", borderRadius: 12, padding: 30, transition: "border-color 0.3s", display: "block" }}
+                onMouseEnter={e => (e.currentTarget.style.borderColor = "#d4af37")}
+                onMouseLeave={e => (e.currentTarget.style.borderColor = "#222")}
+              >
+                <p style={{ color: "#555", fontSize: 13, marginBottom: 12 }}>{article.date}</p>
+                <h3 style={{ color: "#fff", fontSize: 20, marginBottom: 12, fontWeight: 600 }}>{article.title}</h3>
+                <p style={{ color: "#888", fontSize: 15, lineHeight: 1.7 }}>{article.excerpt}</p>
+                <p style={{ color: "#d4af37", fontSize: 14, marginTop: 15 }}>{"\u0427\u0438\u0442\u0430\u0442\u044C \u0434\u0430\u043B\u0435\u0435 \u2192"}</p>
+              </a>
+            ))}
+          </div>
+        </AnimatedSection>
+      </section>
+
+      {/* Subscribe */}
+      <section style={{ padding: "80px 20px", borderTop: "1px solid #1a1a1a", borderBottom: "1px solid #1a1a1a" }}>
+        <AnimatedSection>
+          <h2 style={{ textAlign: "center", color: "#d4af37", fontSize: 32, marginBottom: 30, fontWeight: 600 }}>
+            {"\u0411\u0443\u0434\u044C\u0442\u0435 \u0432 \u043A\u0443\u0440\u0441\u0435"}
+          </h2>
+          <SubscribeForm />
+        </AnimatedSection>
       </section>
 
       {/* Contacts */}
