@@ -3,10 +3,12 @@
 import { useState, useEffect } from "react";
 
 const navLinks = [
-  { href: "#home", label: "\u0413\u043B\u0430\u0432\u043D\u0430\u044F" },
-  { href: "#about", label: "\u041E \u043A\u043E\u043D\u0446\u0435\u043F\u0446\u0438\u0438" },
-  { href: "#projects", label: "\u041F\u0440\u043E\u0435\u043A\u0442\u044B" },
-  { href: "#contacts", label: "\u041A\u043E\u043D\u0442\u0430\u043A\u0442\u044B" },
+  { href: "/#home", label: "\u0413\u043B\u0430\u0432\u043D\u0430\u044F" },
+  { href: "/#about", label: "\u041E \u043A\u043E\u043D\u0446\u0435\u043F\u0446\u0438\u0438" },
+  { href: "/#projects", label: "\u041F\u0440\u043E\u0435\u043A\u0442\u044B" },
+  { href: "/#contacts", label: "\u041A\u043E\u043D\u0442\u0430\u043A\u0442\u044B" },
+  { href: "/blog", label: "\u0411\u043B\u043E\u0433" },
+  { href: "/library", label: "\u0411\u0438\u0431\u043B\u0438\u043E\u0442\u0435\u043A\u0430" },
 ];
 
 export default function Nav() {
