@@ -1,4 +1,4 @@
-import { getAllArticles, getAllCategories, getAllTags } from "@/lib/articles";
+﻿import { getAllArticles, getAllCategories, getAllTags } from "@/lib/articles";
 import Link from "next/link";
 
 export default async function BlogPage({
@@ -22,13 +22,13 @@ export default async function BlogPage({
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#0a0a0a", color: "#e5e5e5" }}>
       <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "48px 24px 100px" }}>
-        <h1 style={{ fontSize: "32px", fontWeight: 700, color: "#fff", marginBottom: "40px" }}>
+        <Link href="/" style={{color:"#c9a84c",textDecoration:"none",fontSize:"15px",display:"inline-flex",alignItems:"center",gap:"6px",marginBottom:"24px"}}>{"← \u041d\u0430 \u0433\u043b\u0430\u0432\u043d\u0443\u044e"}</Link><h1 style={{ fontSize: "32px", fontWeight: 700, color: "#fff", marginBottom: "40px" }}>
           {"\u0411\u043B\u043E\u0433"}
         </h1>
 
         <div style={{ display: "flex", gap: "40px" }}>
 
-          {/* ── Sidebar ── */}
+          {/* в”Ђв”Ђ Sidebar в”Ђв”Ђ */}
           <div style={{ width: "240px", flexShrink: 0 }}>
             {/* Categories */}
             <div style={{ marginBottom: "32px" }}>
@@ -92,7 +92,7 @@ export default async function BlogPage({
             )}
           </div>
 
-          {/* ── Articles ── */}
+          {/* в”Ђв”Ђ Articles в”Ђв”Ђ */}
           <div style={{ flex: 1, minWidth: 0 }}>
             {filtered.length === 0 ? (
               <p style={{ color: "#737373", fontSize: "18px" }}>
