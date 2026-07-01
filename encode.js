@@ -1,85 +1,67 @@
-const fs = require("fs");
-const path = require("path");
+const fs = require('fs');
+const path = require('path');
 
-const inputFile = path.join(__dirname, "input.txt");
-const destDir = path.join(__dirname, "content", "articles");
+const input = fs.readFileSync(path.join(__dirname, 'input.txt'), 'utf8');
+const lines = input.split('\n');
 
-let raw = fs.readFileSync(inputFile, "utf8");
-if (raw.charCodeAt(0) === 0xFEFF) raw = raw.slice(1);
+let title = '', excerpt = '', category = '', tags = '';
+let textStarted = false;
+let textLines = [];
 
-const lines = raw.split(/\r?\n/);
-
-const title = (lines[0] || "").trim();
-const excerpt = (lines[1] || "").trim();
-const category = (lines[2] || "").trim() || "\u0411\u0435\u0437 \u043A\u0430\u0442\u0435\u0433\u043E\u0440\u0438\u0438";
-const tagsRaw = (lines[3] || "").trim();
-const tags = tagsRaw ? tagsRaw.split(",").map(t => t.trim()).filter(t => t) : [];
-
-if (!title) {
-  console.log("Error: input.txt is empty or missing title");
-  process.exit(1);
-}
-
-// Собираем абзацы — ищем первую пустую строку после строки 3
-let contentStart = 4;
-while (contentStart < lines.length && lines[contentStart].trim() === "") {
-  contentStart++;
-}
-
-const contentLines = lines.slice(contentStart);
-const content = [];
-let current = "";
-
-for (const line of contentLines) {
-  if (line.trim() === "") {
-    if (current.trim()) {
-      content.push(current.trim());
-      current = "";
-    }
-  } else {
-    current += (current ? " " : "") + line.trim();
+for (const line of lines) {
+  if (/^(Название|Заголовок|Title):\s*/i.test(line)) {
+    title = line.replace(/^(Название|Заголовок|Title):\s*/i, '').trim();
+  } else if (/^(Описание|Description|Excerpt):\s*/i.test(line)) {
+    excerpt = line.replace(/^(Описание|Description|Excerpt):\s*/i, '').trim();
+  } else if (/^(Категория|Category):\s*/i.test(line)) {
+    category = line.replace(/^(Категория|Category):\s*/i, '').trim();
+  } else if (/^(Теги|Tags):\s*/i.test(line)) {
+    tags = line.replace(/^(Теги|Tags):\s*/i, '').trim();
+  } else if (/^(Текст|Text|Content):\s*/i.test(line)) {
+    textStarted = true;
+    var rest = line.replace(/^(Текст|Text|Content):\s*/i, '').trim();
+    if (rest) textLines.push(rest);
+  } else if (textStarted) {
+    textLines.push(line);
   }
 }
-if (current.trim()) content.push(current.trim());
 
-if (content.length === 0) {
-  console.log("Error: no content found in input.txt");
-  process.exit(1);
+var content = textLines.join('\n').trim();
+
+// Remove surrounding quotes if present
+if (content.startsWith('"') && content.endsWith('"')) {
+  content = content.slice(1, -1).trim();
 }
 
-// Транслитерация для slug
-const slugMap = {
-  "\u0430":"a","\u0431":"b","\u0432":"v","\u0433":"g","\u0434":"d","\u0435":"e",
-  "\u0451":"yo","\u0436":"zh","\u0437":"z","\u0438":"i","\u0439":"y","\u043A":"k",
-  "\u043B":"l","\u043C":"m","\u043D":"n","\u043E":"o","\u043F":"p","\u0440":"r",
-  "\u0441":"s","\u0442":"t","\u0443":"u","\u0444":"f","\u0445":"kh","\u0446":"ts",
-  "\u0447":"ch","\u0448":"sh","\u0449":"shch","\u044A":"","\u044B":"y","\u044C":"",
-  "\u044D":"e","\u044E":"yu","\u044F":"ya"," ":"-",
-  "\u0410":"a","\u0411":"b","\u0412":"v","\u0413":"g","\u0414":"d","\u0415":"e",
-  "\u0401":"yo","\u0416":"zh","\u0417":"z","\u0418":"i","\u0419":"y","\u041A":"k",
-  "\u041B":"l","\u041C":"m","\u041D":"n","\u041E":"o","\u041F":"p","\u0420":"r",
-  "\u0421":"s","\u0422":"t","\u0423":"u","\u0424":"f","\u0425":"kh","\u0426":"ts",
-  "\u0427":"ch","\u0428":"sh","\u0429":"shch","\u042A":"","\u042B":"y","\u042C":"",
-  "\u042D":"e","\u042E":"yu","\u042F":"ya",
+if (!title) { console.log('ERROR: No title found'); process.exit(1); }
+if (!content) { console.log('ERROR: No content found'); process.exit(1); }
+
+// Transliterate title to slug
+var ruMap = {а:'a',б:'b',в:'v',г:'g',д:'d',е:'e',ё:'yo',ж:'zh',з:'z',и:'i',й:'y',к:'k',л:'l',м:'m',н:'n',о:'o',п:'p',р:'r',с:'s',т:'t',у:'u',ф:'f',х:'kh',ц:'ts',ч:'ch',ш:'sh',щ:'shch',ъ:'',ы:'y',ь:'',э:'e',ю:'yu',я:'ya',А:'A',Б:'B',В:'V',Г:'G',Д:'D',Е:'E',Ё:'Yo',Ж:'Zh',З:'Z',И:'I',Й:'Y',К:'K',Л:'L',М:'M',Н:'N',О:'O',П:'P',Р:'R',С:'S',Т:'T',У:'U',Ф:'F',Х:'Kh',Ц:'Ts',Ч:'Ch',Ш:'Sh',Щ:'Shch',Ъ:'',Ы:'Y',Ь:'',Э:'E',Ю:'Yu',Я:'Ya'};
+var slug = title.split('').map(function(c) { return ruMap[c] || c; }).join('')
+  .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+var tagsArr = tags ? tags.split(',').map(function(t) { return t.trim(); }).filter(Boolean) : [];
+var paragraphs = content.split(/\n\s*\n/).filter(function(p) { return p.trim(); });
+
+var article = {
+  title: title,
+  excerpt: excerpt || title,
+  category: category || 'Без категории',
+  tags: tagsArr,
+  content: paragraphs.join('\n\n'),
+  slug: slug,
+  date: new Date().toISOString().split('T')[0],
+  readTime: Math.max(1, Math.ceil(content.split(/\s+/).length / 200))
 };
 
-let slug = title.toLowerCase().split("").map(c => slugMap[c] || c).join("")
-  .replace(/[^a-z0-9-]/g, "").replace(/-+/g, "-").replace(/^-|-$/g, "");
+var dir = path.join(__dirname, 'content', 'articles');
+if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+var filePath = path.join(dir, slug + '.json');
+fs.writeFileSync(filePath, JSON.stringify(article, null, 2), 'utf8');
 
-if (!slug) slug = "article-" + Date.now();
-
-const readTime = Math.max(1, Math.ceil(content.join("").length / 1500)) + " \u043C\u0438\u043D";
-
-const article = { slug, title, excerpt, category, tags, content, date: new Date().toISOString().slice(0, 10), readTime };
-
-if (!fs.existsSync(destDir)) {
-  fs.mkdirSync(destDir, { recursive: true });
-}
-
-const filePath = path.join(destDir, slug + ".json");
-fs.writeFileSync(filePath, JSON.stringify(article, null, 2), "utf8");
-
-console.log("+ " + slug + ".json");
-console.log("  Category: " + article.category);
-console.log("  Tags: " + (tags.length ? tags.join(", ") : "(none)"));
-console.log("  Paragraphs: " + content.length);
+console.log('+ ' + slug + '.json');
+console.log('  Title: ' + title);
+console.log('  Category: ' + article.category);
+console.log('  Tags: ' + (tagsArr.length ? tagsArr.join(', ') : '(none)'));
+console.log('  Paragraphs: ' + paragraphs.length);

@@ -7,7 +7,7 @@ interface Comment {
   id: number;
   article_slug: string;
   author: string;
-  text: string;
+  content: string;
   created_at: string;
 }
 
@@ -41,7 +41,7 @@ export default function Comments({ articleSlug }: { articleSlug: string }) {
       {
         article_slug: articleSlug,
         author: author.trim(),
-        text: text.trim(),
+        content: text.trim(),
       },
     ]);
 
@@ -51,7 +51,7 @@ export default function Comments({ articleSlug }: { articleSlug: string }) {
           id: Date.now(),
           article_slug: articleSlug,
           author: author.trim(),
-          text: text.trim(),
+          content: text.trim(),
           created_at: new Date().toISOString(),
         },
         ...prev,
@@ -89,7 +89,7 @@ export default function Comments({ articleSlug }: { articleSlug: string }) {
                   {new Date(c.created_at).toLocaleDateString("ru-RU")}
                 </span>
               </div>
-              <p style={{ color: "#ccc", fontSize: 14, lineHeight: 1.6, margin: 0 }}>{c.text}</p>
+              <p style={{ color: "#ccc", fontSize: 14, lineHeight: 1.6, margin: 0 }}>{c.content}</p>
             </div>
           ))}
         </div>

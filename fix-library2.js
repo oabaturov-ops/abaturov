@@ -1,0 +1,93 @@
+const fs = require('fs');
+const path = require('path');
+
+const libraryPage = [
+  "import { books } from \"@/data/books\";",
+  "import Link from \"next/link\";",
+  "",
+  "export const metadata = { title: \"\u0411\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0430 | \u0410\u0431\u0430\u0442\u0443\u0440\u043e\u0432\" };",
+  "",
+  "export default function LibraryPage() {",
+  "  const categories = [...new Set(books.map(b => b.author))];",
+  "",
+  "  return (",
+  "    <div style={{ background: \"#0a0a0a\", color: \"#e0e0e0\", minHeight: \"100vh\" }}>",
+  "      <div style={{ maxWidth: 1200, margin: \"0 auto\", padding: \"60px 24px\" }}>",
+  "        <h1 style={{ fontSize: 48, color: \"#c9a84c\", marginBottom: 12, fontWeight: 700 }}>\u0411\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0430</h1>",
+  "        <p style={{ fontSize: 18, color: \"#999\", marginBottom: 48 }}>\u041a\u043d\u0438\u0433\u0438 \u0438 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b \u0431\u0440\u0430\u0442\u044c\u0435\u0432 \u0410\u0431\u0430\u0442\u0443\u0440\u043e\u0432\u044b\u0445</p>",
+  "",
+  "        <div style={{ display: \"flex\", gap: 32, alignItems: \"flex-start\" }}>",
+  "          <div style={{ flex: 1 }}>",
+  "            {books.map((book) => (",
+  "              <Link key={book.id} href={\"/library/\" + book.id} style={{ textDecoration: \"none\", color: \"inherit\", display: \"block\", marginBottom: 20 }}>",
+  "                <div style={{ background: \"#141414\", border: \"1px solid #2a2a2a\", borderRadius: 12, padding: 24, transition: \"border-color 0.3s\" }}>",
+  "                  <h2 style={{ fontSize: 20, color: \"#c9a84c\", marginBottom: 8 }}>{book.title}</h2>",
+  "                  <p style={{ fontSize: 14, color: \"#888\", marginBottom: 8 }}>{book.author}</p>",
+  "                  <p style={{ fontSize: 15, color: \"#aaa\", lineHeight: 1.6 }}>{book.description}</p>",
+  "                </div>",
+  "              </Link>",
+  "            ))}",
+  "          </div>",
+  "",
+  "          <div style={{ width: 220, flexShrink: 0 }}>",
+  "            <h3 style={{ fontSize: 16, color: \"#c9a84c\", marginBottom: 16 }}>\u0410\u0432\u0442\u043e\u0440\u044b</h3>",
+  "            {categories.map((cat) => (",
+  "              <div key={cat} style={{ padding: \"8px 0\", fontSize: 14, color: \"#999\", borderBottom: \"1px solid #222\" }}>{cat}</div>",
+  "            ))}",
+  "          </div>",
+  "        </div>",
+  "",
+  "        <div style={{ marginTop: 48, paddingTop: 24, borderTop: \"1px solid #222\" }}>",
+  "          <Link href=\"/\" style={{ color: \"#c9a84c\", textDecoration: \"none\", fontSize: 15 }}>\u2190 \u041d\u0430\u0437\u0430\u0434 \u043a \u0433\u043b\u0430\u0432\u043d\u043e\u0439</Link>",
+  "        </div>",
+  "      </div>",
+  "    </div>",
+  "  );",
+  "}",
+].join('\n');
+
+const libraryIdPage = [
+  "import { books } from \"@/data/books\";",
+  "import { notFound } from \"next/navigation\";",
+  "import Link from \"next/link\";",
+  "",
+  "export async function generateStaticParams() {",
+  "  return books.map((b) => ({ id: String(b.id) }));",
+  "}",
+  "",
+  "export default async function BookPage({ params }: { params: Promise<{ id: string }> }) {",
+  "  const { id } = await params;",
+  "  const book = books.find((b) => b.id === Number(id));",
+  "  if (!book) notFound();",
+  "",
+  "  return (",
+  "    <div style={{ background: \"#0a0a0a\", color: \"#e0e0e0\", minHeight: \"100vh\" }}>",
+  "      <div style={{ maxWidth: 900, margin: \"0 auto\", padding: \"60px 24px\" }}>",
+  "        <Link href=\"/library\" style={{ color: \"#c9a84c\", textDecoration: \"none\", fontSize: 15, display: \"inline-block\", marginBottom: 32 }}>\u2190 \u041d\u0430\u0437\u0430\u0434 \u043a \u0431\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0435</Link>",
+  "",
+  "        <h1 style={{ fontSize: 36, color: \"#c9a84c\", marginBottom: 8, fontWeight: 700 }}>{book.title}</h1>",
+  "        <p style={{ fontSize: 16, color: \"#888\", marginBottom: 24 }}>{book.author}</p>",
+  "        <p style={{ fontSize: 16, color: \"#bbb\", lineHeight: 1.8, marginBottom: 32 }}>{book.description}</p>",
+  "",
+  "        <div style={{ display: \"flex\", gap: 16, flexWrap: \"wrap\" }}>",
+  "          {book.pdfUrl && (",
+  "            <a href={book.pdfUrl} target=\"_blank\" rel=\"noopener noreferrer\" style={{ background: \"#c9a84c\", color: \"#000\", padding: \"12px 24px\", borderRadius: 8, textDecoration: \"none\", fontWeight: 600, fontSize: 14 }}>\u0421\u043a\u0430\u0447\u0430\u0442\u044c PDF</a>",
+  "          )}",
+  "          {book.externalUrl && (",
+  "            <a href={book.externalUrl} target=\"_blank\" rel=\"noopener noreferrer\" style={{ border: \"1px solid #c9a84c\", color: \"#c9a84c\", padding: \"12px 24px\", borderRadius: 8, textDecoration: \"none\", fontWeight: 600, fontSize: 14 }}>\u0427\u0438\u0442\u0430\u0442\u044c \u043e\u043d\u043b\u0430\u0439\u043d</a>",
+  "          )}",
+  "        </div>",
+  "      </div>",
+  "    </div>",
+  "  );",
+  "}",
+].join('\n');
+
+const dir1 = path.join(__dirname, 'src', 'app', 'library');
+const dir2 = path.join(__dirname, 'src', 'app', 'library', '[id]');
+
+fs.writeFileSync(path.join(dir1, 'page.tsx'), libraryPage, 'utf8');
+console.log('OK: library/page.tsx rewritten');
+
+fs.writeFileSync(path.join(dir2, 'page.tsx'), libraryIdPage, 'utf8');
+console.log('OK: library/[id]/page.tsx rewritten');
