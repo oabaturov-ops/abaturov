@@ -49,10 +49,10 @@ var article = {
   excerpt: excerpt || title,
   category: category || 'Без категории',
   tags: tagsArr,
-  content: paragraphs.join('\n\n'),
+  content: paragraphs,
   slug: slug,
   date: new Date().toISOString().split('T')[0],
-  readTime: Math.max(1, Math.ceil(content.split(/\s+/).length / 200))
+  readTime: Math.max(1, Math.ceil(paragraphs.join(' ').split(/\s+/).length / 200))
 };
 
 var dir = path.join(__dirname, 'content', 'articles');
