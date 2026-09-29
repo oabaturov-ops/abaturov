@@ -232,8 +232,11 @@ export default function Home() {
 
       {/* Footer */}
       <footer style={{ padding: "40px 20px", borderTop: "1px solid #1a1a1a", textAlign: "center" }}>
-        <p style={{ color: "#555", fontSize: 13, marginBottom: 20 }}>
-          {"\u00A9 2026 Abatur Ministry. \u0412\u0441\u0435 \u043F\u0440\u0430\u0432\u0430 \u0437\u0430\u0449\u0438\u0449\u0435\u043D\u044B."}
+                <p style={{ color: "#555", fontSize: 13, marginBottom: 20 }}>
+          {"\u00A9 2026 Abatur Ministry. \u0412\u0441\u0435 \u043F\u0440\u0430\u0432\u0430 \u0437\u0430\u0449\u0438\u0449\u0435\u043D\u044B."}{" "}
+          <a href="/privacy" style={{ color: "#c9a84c", textDecoration: "none" }}>
+            Политика конфиденциальности
+          </a>
         </p>
         <div style={{ display: "flex", justifyContent: "center", gap: 25, flexWrap: "wrap" }}>
           <a href="https://abaturministries.org" target="_blank" rel="noopener noreferrer" style={{ color: "#555", textDecoration: "none", fontSize: 13 }}>
